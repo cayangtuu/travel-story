@@ -1,6 +1,10 @@
+const { Travel } = require('../models')
 const travelController = {
   getTravels: (req, res, next) => {
-    return res.render('travels', { travels })
+    Travel.findAll({
+      raw: true
+    })
+      .then(travels => res.render('travels', { travels }))
   },
   createTravel: (req, res, next) => {
     return res.render('create-travel')
