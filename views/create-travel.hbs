@@ -1,0 +1,43 @@
+<div class="form-box px-5 py-3 border border-1 border-primary rounded">
+  <div class="form-head">
+    <h1 class="fw-bolder">新增旅行筆記</h1>
+    <p class="fw-bold">輸入相關資訊，我們將為你打造創造屬於你的旅行筆記</p>
+  </div>
+  <form class="form-body" action="/travels" method="POST" enctype="multipart/form-data">
+    <div class="form-group mb-3">
+      <label class="fw-bolder" for="name">旅行名稱 <span class="text-danger">*</span></label>
+      <input type="text" id="name" class="form-control" name="name" required>
+    </div>
+    <div class="form-group mb-3">
+      <label class="fw-bolder" for="location">旅行地點 <span class="text-danger">*</span></label>
+      <input type="text" id="location" class="form-control" name="location" required>
+    </div>
+    <div class="row mb-3">
+      <div class="form-group col-md-6">
+        <label class="fw-bolder">旅行開始日期 <span class="text-danger">*</span></label>
+        <input type="date" class="form-control" id="beginDate" name="beginDate" placeholder="開始" required>
+      </div>
+      <div class="form-group col-md-6">
+        <label class="fw-bolder">旅行結束日期 <span class="text-danger">*</span></label>
+        <input type="date" class="form-control" id="finishDate" name="finishDate" placeholder="結束" required>
+      </div>
+    </div>
+    <div class="form-group mb-3">
+      <label class="fw-bolder" for="score">旅行評分</label>
+      <input type="number" id="score" class="form-control" name="score" min="0" max="5" step="0.1">
+    </div>
+    <div class="form-group mb-3">
+      <label class="fw-bolder" for="image">旅行圖片 <span class="text-danger">*</span></label>
+      <input type="file" id="image" class="form-control" name="image" required>
+    </div>
+    <div class="form-group mb-3">
+      <label class="fw-bolder" for="description">行程說明與紀錄</label>
+      <br>
+      <textarea class="form-control" id="description" rows="5" name="description"></textarea>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">送出</button>
+      <button type="reset" class="btn btn-info">重新填寫</button>
+    </div>
+  </form>
+</div>
