@@ -2,27 +2,33 @@ const { Travel } = require('../models')
 const imgurFileHandler = require('../helpers/file-helper')
 const travelController = {
   getTravels: (req, res, next) => {
-    Travel.findAll({
+    return Travel.findAll({
       raw: true
     })
       .then(travels => res.render('travels', { travels }))
+      .catch(err => next(err))
   },
   createTravel: (req, res, next) => {
-    return res.render('create-travel')
+    try {
+      return res.render('create-travel')
+    } catch (err) { next(err) }
   },
   postTravel: (req, res, next) => {
-    const { name, location, beginDate, finishDate, score, image, description } = req.body
-    if (!name || !location || !beginDate || !finishDate) { console.log('ERRor') }
+    const { name, location, beginDate, finishDate, score, description } = req.body
+    if (!name || !location || !beginDate || !finishDate) throw new Error('err_msg', '必填欄位未正確填寫')
     const { file } = req
     return imgurFileHandler(file)
       .then(filePath => {
-        if (!filePath) { console.log(' no image ERRor') }
+        if (!filePath) throw new Error('err_msg', '相片未上傳')
         return Travel.create({
           name, location, beginDate, finishDate, score, description,
           image: filePath || null
         })
       })
-      .then(() => res.redirect('/'))
+      .then(() => {
+        req.flash('success_msg', '筆記新增成功!!!')
+        res.redirect('/')
+      })
       .catch(err => next(err))
   }
 }
