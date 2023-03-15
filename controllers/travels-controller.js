@@ -8,6 +8,14 @@ const travelController = {
       .then(travels => res.render('travels', { travels }))
       .catch(err => next(err))
   },
+  travelList: (req, res, next) => {
+    Travel.findAll({
+      raw: true
+    })
+      .then(travels => res.render('travel-list', { travels }))
+      .catch(err => next(err))
+
+  },
   createTravel: (req, res, next) => {
     try {
       return res.render('create-travel')

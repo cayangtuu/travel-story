@@ -1,0 +1,39 @@
+<section id="introSection" class="py-5">
+  <h1 class="section-title text-center mb-5">旅行列表</h1>
+  <div class="container">
+    <div class="row">
+      {{#each travels}}
+      <div class="card col-md-4 m2-3 py-3">
+        <a href="/travels/{{this.id}}">
+          <img class="card-img-top" src="{{this.image}}" alt="旅行圖片">
+        </a>
+        <div class="card-body">
+          <div class="card-text position-relative">
+            <a href="/travels/{{this.id}}" style="text-decoration:none;">
+              <h4 class="card-title text-primary">{{this.name}}</h4>
+            </a>
+            <span class="position-absolute top-0 end-0 badge rounded-pill bg-info fs-6">{{this.score}}</span>
+            <br>
+            <div class="d-flex">
+              <i class="fa-solid fa-plane-departure"></i>
+              <p class="mx-2 fs-5">{{this.location}}</p>
+            </div>
+            <div class="d-flex">
+              <i class="fa-regular fa-calendar-days fs-5"></i>
+              <p class="mx-2 fs-5">{{formatDate this.beginDate}}~{{formatDate this.finishDate}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <form action="/travels/like/{{this.id}}" method="POST">
+            <button class="btn btn-outline-danger m-1">讚</button>
+          </form>
+          <form action="/travels/favorite/{{this.id}}" method="POST">
+            <button class="btn btn-outline-success m-1">收藏</button>
+          </form>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
