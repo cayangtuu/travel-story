@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 8080
 const app = express()
 app.engine('hbs', exhbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
+app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
 app.use(routes)

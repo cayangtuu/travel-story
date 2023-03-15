@@ -23,8 +23,10 @@
       </div>
     </div>
     <div class="form-group mb-3">
-      <label class="fw-bolder" for="score">旅行評分</label>
-      <input type="number" id="score" class="form-control" name="score" min="0" max="5" step="0.1">
+      <label class="fw-bolder d-block" for="score">旅行評分</label>
+      <input class="col-md-6" type="range" id="score" name="score" min="0" max="5" step="0.1" value="0"
+        oninput="this.nextElementSibling.value = this.value">
+      <output class="col-md-2 d-inline mx-3 h5">0</output>
     </div>
     <div class="form-group mb-3">
       <label class="fw-bolder" for="image">旅行圖片 <span class="text-danger">*</span></label>
