@@ -3,12 +3,4 @@
   <h2 class="mb-3">多久沒來場旅行了呢?</h2>
   <p>又多久沒為自己的旅行寫下深刻的回憶紀錄了呢?</p>
 </div>
-<form class="trip-select" action="/Output">
-  <select name="trip-id" class="form-select form-select-lg" aria-label=".form-select-lg">
-    <option selected>旅行名稱</option>
-    {{#each travels}}
-    <option value={{this.id}}>{{this.name}}</option>
-    {{/each}}
-  </select>
-  <button class="btn btn-primary mt-3" type="submit">查詢</button>
-</form>
+{{>select-trip}}

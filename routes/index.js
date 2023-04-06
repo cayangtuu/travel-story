@@ -7,6 +7,7 @@ const { generalErrorHandler } = require('../middleware/error-handler')
 router.get('/travels/list', travelController.travelList)
 router.get('/create', travelController.createTravel)
 router.get('/travels', travelController.getTravels)
+router.get('/travels/:id', travelController.getTravel)
 router.post('/travels', upload.single('image'), travelController.postTravel)
 
 router.use('/', (req, res) => res.redirect('/travels'))
