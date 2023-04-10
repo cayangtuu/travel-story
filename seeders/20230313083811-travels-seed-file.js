@@ -13,7 +13,6 @@ module.exports = {
         finish_date: dayjs(faker.date.recent(5)).format('YYYY/MM/DD'),
         description: faker.lorem.text(),
         score: faker.datatype.float({ min: 0, max: 5, precision: 0.1 }),
-        image: `${faker.image.nature(320, 240)}/${Math.floor(Math.random() * 50)}`,
         user_id: users[Math.floor(Math.random() * users.length)].id,
         created_at: new Date(),
         updated_at: new Date()

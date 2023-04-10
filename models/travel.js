@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Travel.belongsTo(models.User, { foreignKey: 'userId' })
+      Travel.hasMany(models.Image, { foreignKey: 'travelId' })
     }
   }
   Travel.init({
@@ -20,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
     finishDate: DataTypes.DATE,
     description: DataTypes.TEXT,
     score: DataTypes.FLOAT,
-    image: DataTypes.STRING,
     userId: DataTypes.INTEGER
   }, {
     sequelize,
