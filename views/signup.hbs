@@ -1,0 +1,27 @@
+<div class="container w-50 border border-dark border-2 rounded" style="background-color: rgb(142, 162, 204);">
+  <div class="my-4">
+    <h1 class="h3 fw-bolder mb-3">註冊</h1>
+  </div>
+  <form action="/signup" method="POST">
+    <div class="form-row mb-3">
+      <label class="form-label fw-bold" for="name">名字</label>
+      <input type="text" id="name" name="name" class="form-control">
+    </div>
+    <div class="form-row mb-3">
+      <label class="form-label fw-bold" for="email">信箱 <span class="text-danger">*</span></label>
+      <input type="email" id="email" name="email" class="form-control" required>
+    </div>
+    <div class="form-row mb-3">
+      <label class="form-label fw-bold" for="password">密碼 <span class="text-danger">*</span></label>
+      <input type="password" id="password" name="password" class="form-control" required>
+    </div>
+    <div class="form-row mb-3">
+      <label class="form-label fw-bold" for="passwordCheck">確認密碼 <span class="text-danger">*</span></label>
+      <input type="password" id="passwordCheck" name="passwordCheck" class="form-control" required>
+    </div>
+    <button class="btn btn-primary btn-block w-100" type="submit">註冊</button>
+  </form>
+  <div class="my-4 text-center fw-bold">
+    <p>已經有帳號了嗎? <a class="text-primary" href="/signin">&nbsp;登入</a></p>
+  </div>
+</div>

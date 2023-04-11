@@ -53,7 +53,7 @@ const travelController = {
     const t = await sequelize.transaction()
     try {
       const { name, location, beginDate, finishDate, score, description } = req.body
-      if (!name || !location || !beginDate || !finishDate) throw new Error('err_msg', '必填欄位未正確填寫')
+      if (!name || !location || !beginDate || !finishDate) throw new Error('必填欄位未正確填寫')
 
       const newTravel = await Travel.create({
         name, location, beginDate, finishDate, score, description,
@@ -63,12 +63,11 @@ const travelController = {
       const allImages = await Promise.all(
         files.map(async (file) => {
           const filePath = await imgurFileHandler(file)
-          if (!filePath) throw new Error('err_msg', '相片未上傳成功')
+          if (!filePath) throw new Error('相片未上傳成功')
           return await Image.create({
             image: filePath, travelId: newTravel.toJSON().id
           }, { transaction: t })
         }))
-      console.log(allImages)
       await t.commit()
       req.flash('success_msg', '筆記新增成功!!!')
       return res.redirect('/travels/list')
