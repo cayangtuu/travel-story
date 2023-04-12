@@ -1,5 +1,6 @@
 const { User } = require('../models')
 const bcrypt = require('bcryptjs')
+const { CustomError } = require('../helpers/error-helper')
 const userController = {
   signUpPage: (req, res, next) => {
     try {
@@ -9,10 +10,10 @@ const userController = {
   signUp: async (req, res, next) => {
     try {
       const { name, email, password, passwordCheck } = req.body
-      if (!email || !password || !passwordCheck) throw new Error('必填欄位未正確填寫')
-      if (password !== passwordCheck) throw new Error('密碼輸入不相符')
+      if (!email.trim() || !password.trim() || !passwordCheck.trim()) throw new CustomError('必填欄位未正確填寫', 400)
+      if (password !== passwordCheck) throw new CustomError('密碼輸入不相符', 403)
       const user = await User.findOne({ where: { email } })
-      if (user) throw new Error('此帳號已註冊過')
+      if (user) throw new CustomError('email 已重複註冊', 403)
 
       const salt = await bcrypt.genSalt(10)
       const hashPassword = await bcrypt.hash(password, salt)

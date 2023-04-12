@@ -1,5 +1,8 @@
+const assert = require('assert')
 const { Travel, Image, sequelize } = require('../models')
 const imgurFileHandler = require('../helpers/file-helper')
+const { CustomError, AssertError } = require('../helpers/error-helper')
+
 const travelController = {
   getTravels: async (req, res, next) => {
     try {
@@ -21,6 +24,7 @@ const travelController = {
           order: ['created_at', 'DESC']
         }
       })
+      assert(travel, new AssertError('找不到資料'))
       return res.render('travel', {
         travel: travel.toJSON(),
         firstImage: travel.Images[0].image
@@ -53,17 +57,17 @@ const travelController = {
     const t = await sequelize.transaction()
     try {
       const { name, location, beginDate, finishDate, score, description } = req.body
-      if (!name || !location || !beginDate || !finishDate) throw new Error('必填欄位未正確填寫')
+      if (!name.trim() || !location.trim() || !beginDate || !finishDate) throw new CustomError('必填欄位未正確填寫', 400)
 
       const newTravel = await Travel.create({
         name, location, beginDate, finishDate, score, description,
       }, { transaction: t })
 
       const { files } = req
-      const allImages = await Promise.all(
+      await Promise.all(
         files.map(async (file) => {
           const filePath = await imgurFileHandler(file)
-          if (!filePath) throw new Error('相片未上傳成功')
+          assert(filePath, new AssertError('相片上傳失敗'))
           return await Image.create({
             image: filePath, travelId: newTravel.toJSON().id
           }, { transaction: t })
