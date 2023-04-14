@@ -2,6 +2,7 @@ const assert = require('assert')
 const { Travel, Image, sequelize } = require('../models')
 const imgurFileHandler = require('../helpers/file-helper')
 const { CustomError, AssertError } = require('../helpers/error-helper')
+const { getUser } = require('../helpers/auth-helper')
 
 const travelController = {
   getTravels: async (req, res, next) => {
@@ -58,9 +59,8 @@ const travelController = {
     try {
       const { name, location, beginDate, finishDate, score, description } = req.body
       if (!name.trim() || !location.trim() || !beginDate || !finishDate) throw new CustomError('必填欄位未正確填寫', 400)
-
       const newTravel = await Travel.create({
-        name, location, beginDate, finishDate, score, description,
+        name, location, beginDate, finishDate, score, description, userId: getUser(req).id
       }, { transaction: t })
 
       const { files } = req

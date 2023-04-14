@@ -10,7 +10,7 @@ const userController = {
   signUp: async (req, res, next) => {
     try {
       const { name, email, password, passwordCheck } = req.body
-      if (!email.trim() || !password.trim() || !passwordCheck.trim()) throw new CustomError('必填欄位未正確填寫', 400)
+      if (!name.trim() || !email.trim() || !password.trim() || !passwordCheck.trim()) throw new CustomError('必填欄位未正確填寫', 400)
       if (password !== passwordCheck) throw new CustomError('密碼輸入不相符', 403)
       const user = await User.findOne({ where: { email } })
       if (user) throw new CustomError('email 已重複註冊', 403)

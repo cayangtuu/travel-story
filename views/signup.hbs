@@ -4,8 +4,8 @@
   </div>
   <form action="/signup" method="POST">
     <div class="form-row mb-3">
-      <label class="form-label fw-bold" for="name">名字</label>
-      <input type="text" id="name" name="name" class="form-control">
+      <label class="form-label fw-bold" for="name">名字 <span class="text-danger">*</span></label>
+      <input type="text" id="name" name="name" class="form-control" required>
     </div>
     <div class="form-row mb-3">
       <label class="form-label fw-bold" for="email">信箱 <span class="text-danger">*</span></label>
