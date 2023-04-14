@@ -4,12 +4,28 @@
       <a class="navbar-brand" href="/">
         旅行筆記
       </a>
-      <div>
-        <a href="/travels/List" class="btn btn-warning mx-1">旅行列表
-        </a>
-        <a href="/create" class="btn btn-warning mx-1">新增旅行
-        </a>
+      {{#if the_user}}
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+          <li class="nav-item d-inline-flex align-items-center">
+            <a href="/travels/List" class="btn btn-outline-warning m-1">旅行列表
+            </a>
+          </li>
+          <li class="nav-item d-inline-flex align-items-center">
+            <a href="/travels/create" class="btn btn-outline-warning m-1">新增旅行 </a>
+          </li>
+          <li class="nav-item">
+            <form action="/logout" method="POST">
+              <button class="btn btn-outline-success m-1">登出</button>
+            </form>
+          </li>
+        </ul>
       </div>
+      {{/if}}
     </div>
   </nav>
 </header>
