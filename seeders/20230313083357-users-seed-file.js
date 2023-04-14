@@ -6,6 +6,7 @@ module.exports = {
       name: 'root',
       email: 'root@example.com',
       password: await bcrypt.hash('12345678', 10),
+      avatar: `https://loremflickr.com/320/240/avatar?random=${Math.floor(Math.random() * 50)}`,
       created_at: new Date(),
       updated_at: new Date()
     },
@@ -13,6 +14,7 @@ module.exports = {
       name: 'user1',
       email: 'user1@example.com',
       password: await bcrypt.hash('12345678', 10),
+      avatar: `https://loremflickr.com/320/240/avatar?random=${Math.floor(Math.random() * 50)}`,
       created_at: new Date(),
       updated_at: new Date()
     },

@@ -1,6 +1,10 @@
-const { User } = require('../models')
 const bcrypt = require('bcryptjs')
-const { CustomError } = require('../helpers/error-helper')
+const assert = require('assert')
+const { User } = require('../models')
+const { CustomError, AssertError } = require('../helpers/error-helper')
+const { getUser } = require('../helpers/auth-helper')
+const imgurFileHandler = require('../helpers/file-helper')
+
 const userController = {
   signUpPage: (req, res, next) => {
     try {
@@ -40,6 +44,32 @@ const userController = {
       req.flash('success_msg', '登出成功')
       return res.redirect('/signin')
     })
+  },
+  getProfile: (req, res, next) => {
+    try {
+      const user = getUser(req)
+      assert(user, new AssertError('找不到使用者'))
+      return res.render('edit-profile', { user })
+    } catch { next(err) }
+  },
+  postProfile: async (req, res, next) => {
+    try {
+      const userId = getUser(req).id
+      const { name, avatar, introduction } = req.body
+      if (!name.trim()) throw new CustomError('必填欄位未正確填寫', 400)
+      console.log(req.file)
+      const filePath = await imgurFileHandler(req.file)
+      assert(filePath, new AssertError('相片上傳失敗'))
+      const user = await User.findByPk(userId)
+      assert(user, new AssertError('找不到使用者'))
+      await user.update({
+        name,
+        avatar: avatar || user.avatar,
+        introduction
+      })
+      req.flash('success_msg', '個人資料更新成功!!!')
+      return res.redirect('/users/profile')
+    } catch (err) { next(err) }
   }
 }
 module.exports = userController

@@ -20,7 +20,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      image: {
+      avatar: {
         type: Sequelize.STRING
       },
       created_at: {

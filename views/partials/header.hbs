@@ -1,27 +1,31 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
+    <div class="container-fluid ">
       <a class="navbar-brand" href="/">
         旅行筆記
       </a>
       {{#if the_user}}
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+      <div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item d-inline-flex align-items-center">
-            <a href="/travels/List" class="btn btn-outline-warning m-1">旅行列表
+            <a href="/travels/List" class="btn btn-outline-warning m-1">旅行列表</a>
+          </li>
+          <li class="nav-item d-inline-flex align-items-center">
+            <a href="/travels/create" class="btn btn-outline-warning m-1">新增旅行</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="#" role="button" class="m-1 z-1 nav-link dropdown-toggle rounded-circle" data-bs-toggle="dropdown"
+              aria-expanded="false" style="height: 40px; width: 40px; background-color:rgb(131, 135, 139);">
+              <img src="{{the_user.avatar}}" class="d-block mx-auto z-2" style="background-size:cover;">
             </a>
-          </li>
-          <li class="nav-item d-inline-flex align-items-center">
-            <a href="/travels/create" class="btn btn-outline-warning m-1">新增旅行 </a>
-          </li>
-          <li class="nav-item">
-            <form action="/logout" method="POST">
-              <button class="btn btn-outline-success m-1">登出</button>
-            </form>
+            <ul class="dropdown-menu dropdown-menu-end mt-3">
+              <li class="m-2 text-center"><a href="/users/profile" class="dropdown-item btn">個人頁面</a></li>
+              <li class="m-2 text-center">
+                <form action="/logout" method="POST">
+                  <button class="dropdown-item btn">登出</button>
+                </form>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
