@@ -13,13 +13,14 @@
           <li class="nav-item d-inline-flex align-items-center">
             <a href="/travels/create" class="btn btn-outline-warning m-1">新增旅行</a>
           </li>
-          <li class="nav-item dropdown">
-            <a href="#" role="button" class="m-1 z-1 nav-link dropdown-toggle rounded-circle" data-bs-toggle="dropdown"
-              aria-expanded="false" style="height: 40px; width: 40px; background-color:rgb(131, 135, 139);">
-              <img src="{{the_user.avatar}}" class="d-block mx-auto z-2" style="background-size:cover;">
+          <li class="nav-item d-inline-flex align-items-center dropdown">
+            <a href="#" role="button" class="mx-1" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{{the_user.avatar}}" class="d-block mx-auto border border-1 rounded-circle"
+                style="height: 40px; width: 40px; background-color:rgb(131, 135, 139);">
             </a>
-            <ul class="dropdown-menu dropdown-menu-end mt-3">
-              <li class="m-2 text-center"><a href="/users/profile" class="dropdown-item btn">個人頁面</a></li>
+            <ul class="dropdown-menu dropdown-menu-end mt-2">
+              <li class="m-2 text-center"><a href="/users/profile/{{the_user.id}}" class="dropdown-item btn">個人頁面</a>
+              </li>
               <li class="m-2 text-center">
                 <form action="/logout" method="POST">
                   <button class="dropdown-item btn">登出</button>

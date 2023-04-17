@@ -45,30 +45,42 @@ const userController = {
       return res.redirect('/signin')
     })
   },
-  getProfile: (req, res, next) => {
+  getProfile: async (req, res, next) => {
     try {
-      const user = getUser(req)
+      const userId = req.params.id
+      const user = await User.findByPk(userId, { raw: true })
+      assert(user, new AssertError('找不到使用者'))
+      return res.render('profile', { user })
+    } catch (err) { next(err) }
+  },
+  editProfile: async (req, res, next) => {
+    try {
+      const userId = req.params.id
+      console.log(userId)
+      console.log(getUser(req).id)
+      if (Number(userId) !== Number(getUser(req).id)) throw new CustomError('只能編輯自己的資料', 403)
+      const user = await User.findByPk(userId, { raw: true, attributes: ['id', 'name', 'avatar', 'introduction'] })
       assert(user, new AssertError('找不到使用者'))
       return res.render('edit-profile', { user })
-    } catch { next(err) }
+    } catch (err) { next(err) }
+
   },
-  postProfile: async (req, res, next) => {
+  putProfile: async (req, res, next) => {
     try {
-      const userId = getUser(req).id
-      const { name, avatar, introduction } = req.body
+      const userId = req.params.id
+      console.log(userId)
+      const { name, introduction } = req.body
       if (!name.trim()) throw new CustomError('必填欄位未正確填寫', 400)
-      console.log(req.file)
       const filePath = await imgurFileHandler(req.file)
-      assert(filePath, new AssertError('相片上傳失敗'))
       const user = await User.findByPk(userId)
       assert(user, new AssertError('找不到使用者'))
       await user.update({
         name,
-        avatar: avatar || user.avatar,
+        avatar: filePath || user.avatar,
         introduction
       })
       req.flash('success_msg', '個人資料更新成功!!!')
-      return res.redirect('/users/profile')
+      return res.redirect(`/users/profile/${userId}`)
     } catch (err) { next(err) }
   }
 }
