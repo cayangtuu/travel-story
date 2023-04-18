@@ -6,10 +6,15 @@
       <p class="h5">日期：{{formatDate travel.beginDate}}~{{formatDate travel.finishDate}}</p>
       <p class="h5">地點：{{travel.location}}</p>
       <p class="h5">評分：{{travel.score}}</p>
+      <p class="h5 d-inline">旅行者：</p>
+      <a href="/users/profile/{{travel.User.id}}">
+        <img src=" {{travel.User.avatar}}" class="border rounded-circle m-1"
+          style="height: 40px; width: 40px; background-color:rgb(131, 135, 139);">
+      </a>
     </div>
     <div class="col-md-8">
       <p class="h5">行程說明與紀錄：</p>
-      <p class="h5">{{travel.description}}</p>
+      <p class="h5" style="white-space:pre-wrap;">{{travel.description}}</p>
     </div>
   </div>
   <div class="container my-5" style="width:50%">
@@ -34,10 +39,8 @@
     </div>
   </div>
   <div class="d-flex justify-content-center">
-    <form class="mx-1" action="/travel/:{{ travel.id }}" method="POST">
-      <button class="col btn btn-primary" name="trip-id" value="{{ travel.id }}">修改</button>
-    </form>
-    <form class="mx-1" action="/travel/:{{ travel.id }}" method="GET">
+    <a href="/travels/{{ travel.id }}/edit" class="btn btn-primary mx-1">修改</a>
+    <form class="mx-1" action="/travels/{{ travel.id }}?_method=DELETE" method="POST">
       <button class="btn btn-danger" name="trip-id" value="{{ travel.id }}">刪除</button>
     </form>
   </div>

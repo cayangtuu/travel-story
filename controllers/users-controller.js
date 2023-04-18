@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const assert = require('assert')
-const { User } = require('../models')
+const { User, Travel, Image } = require('../models')
 const { CustomError, AssertError } = require('../helpers/error-helper')
 const { getUser } = require('../helpers/auth-helper')
 const imgurFileHandler = require('../helpers/file-helper')
@@ -50,14 +50,27 @@ const userController = {
       const userId = req.params.id
       const user = await User.findByPk(userId, { raw: true })
       assert(user, new AssertError('找不到使用者'))
-      return res.render('profile', { user })
+      const travels = await Travel.findAll({
+        where: { userId },
+        attributes: ['id', 'name', 'beginDate', 'finishDate'],
+        order: [['begin_date', 'DESC']],
+        include: {
+          model: Image,
+          attributes: ['image'],
+          order: ['created_at', 'DESC']
+        }
+      })
+      const data = travels.map(travel => ({
+        ...travel.toJSON(),
+        name: travel.name.length > 20 ? travel.name.slice(0, 20) + ' ...' : travel.name,
+        Images: travel.Images[0].image
+      }))
+      return res.render('profile', { user, travels: data })
     } catch (err) { next(err) }
   },
   editProfile: async (req, res, next) => {
     try {
       const userId = req.params.id
-      console.log(userId)
-      console.log(getUser(req).id)
       if (Number(userId) !== Number(getUser(req).id)) throw new CustomError('只能編輯自己的資料', 403)
       const user = await User.findByPk(userId, { raw: true, attributes: ['id', 'name', 'avatar', 'introduction'] })
       assert(user, new AssertError('找不到使用者'))

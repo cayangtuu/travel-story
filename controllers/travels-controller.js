@@ -1,5 +1,5 @@
 const assert = require('assert')
-const { Travel, Image, sequelize } = require('../models')
+const { Travel, Image, User, sequelize } = require('../models')
 const imgurFileHandler = require('../helpers/file-helper')
 const { CustomError, AssertError } = require('../helpers/error-helper')
 const { getUser } = require('../helpers/auth-helper')
@@ -19,11 +19,14 @@ const travelController = {
     try {
       const { id } = req.params
       const travel = await Travel.findByPk(id, {
-        include: {
+        include: [{
           model: Image,
           attributes: ['image'],
           order: ['created_at', 'DESC']
-        }
+        }, {
+          model: User,
+          attributes: ['id', 'avatar']
+        }]
       })
       assert(travel, new AssertError('找不到資料'))
       return res.render('travel', {
@@ -67,7 +70,6 @@ const travelController = {
       await Promise.all(
         files.map(async (file) => {
           const filePath = await imgurFileHandler(file)
-          assert(filePath, new AssertError('相片上傳失敗'))
           return await Image.create({
             image: filePath, travelId: newTravel.toJSON().id
           }, { transaction: t })
