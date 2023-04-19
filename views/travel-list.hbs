@@ -25,9 +25,15 @@
           </div>
         </div>
         <div class="d-flex justify-content-center">
-          <form action="/travels/like/{{this.id}}" method="POST">
-            <button class="btn btn-outline-danger m-1">讚</button>
+          {{#if this.isLiked}}
+          <form action="/travels/{{this.id}}/unlike" method="POST">
+            <button class="btn m-1"><i class="fa-solid fa-heart fs-5 text-danger"></i></button>
           </form>
+          {{else}}
+          <form action="/travels/{{this.id}}/like" method="POST">
+            <button class="btn m-1"><i class="fa-regular fa-heart fs-5 text-danger"></i></button>
+          </form>
+          {{/if}}
           <form action="/travels/favorite/{{this.id}}" method="POST">
             <button class="btn btn-outline-success m-1">收藏</button>
           </form>

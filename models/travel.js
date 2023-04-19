@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Travel.belongsTo(models.User, { foreignKey: 'userId' })
       Travel.hasMany(models.Image, { foreignKey: 'travelId' })
+      Travel.hasMany(models.Like, { foreignKey: 'travelId' })
     }
   }
   Travel.init({
