@@ -81,7 +81,6 @@ const userController = {
   putProfile: async (req, res, next) => {
     try {
       const userId = req.params.id
-      console.log(userId)
       const { name, introduction } = req.body
       if (!name.trim()) throw new CustomError('必填欄位未正確填寫', 400)
       const filePath = await imgurFileHandler(req.file)

@@ -67,7 +67,7 @@ const travelController = {
   },
   createTravel: (req, res, next) => {
     try {
-      return res.render('create-travel')
+      return res.render('edit-create-travel', { titleText: '新增' })
     } catch (err) { next(err) }
   },
   postTravel: async (req, res, next) => {
@@ -75,6 +75,7 @@ const travelController = {
     try {
       const { name, location, beginDate, finishDate, score, description } = req.body
       if (!name.trim() || !location.trim() || !beginDate || !finishDate) throw new CustomError('必填欄位未正確填寫', 400)
+      if (beginDate > finishDate) throw new CustomError('開始日期需<=結束日期', 400)
       const newTravel = await Travel.create({
         name, location, beginDate, finishDate, score, description, userId: getUser(req).id
       }, { transaction: t })
@@ -89,7 +90,80 @@ const travelController = {
         }))
       await t.commit()
       req.flash('success_msg', '筆記新增成功!!!')
-      return res.redirect('/travels/list')
+      return res.redirect(`/travels/${newTravel.toJSON().id}`)
+    } catch (err) {
+      await t.rollback()
+      return next(err)
+    }
+  },
+  editTravel: async (req, res, next) => {
+    try {
+      const userId = getUser(req).id
+      const travelId = req.params.id
+
+      const travel = await Travel.findByPk(travelId, { raw: true })
+      assert(travel, new AssertError('資料不存在'))
+      if (Number(travel.userId) !== Number(userId)) throw new CustomError('只能編輯自己的資料', 403)
+
+      return res.render('edit-create-travel', { titleText: '編輯', travel })
+    } catch (err) { next(err) }
+  },
+  putTravel: async (req, res, next) => {
+    const t = await sequelize.transaction()
+    try {
+      const userId = getUser(req).id
+      const travelId = req.params.id
+
+      const travel = await Travel.findByPk(travelId)
+      assert(travel, new AssertError('資料不存在'))
+      if (Number(travel.userId) !== Number(userId)) throw new CustomError('只能編輯自己的資料', 403)
+
+      const { name, location, beginDate, finishDate, score, description } = req.body
+      if (!name.trim() || !location.trim() || !beginDate || !finishDate) throw new CustomError('必填欄位未正確填寫', 400)
+      if (beginDate > finishDate) throw new CustomError('開始日期需<=結束日期', 400)
+
+      await travel.update({
+        name, location, beginDate, finishDate, score, description, userId
+      }, { transaction: t })
+
+      const { files } = req
+      if (files.length > 0) {
+        await Image.destroy({ where: { travelId }, transaction: t })
+        await Promise.all(
+          files.map(async (file) => {
+            const filePath = await imgurFileHandler(file)
+            return await Image.create({
+              image: filePath, travelId
+            }, { transaction: t })
+          })
+        )
+      }
+      await t.commit()
+      req.flash('success_msg', '筆記更新成功!!!')
+      return res.redirect(`/travels/${travelId}`)
+    } catch (err) {
+      await t.rollback()
+      return next(err)
+    }
+  },
+  deleteTravel: async (req, res, next) => {
+    const t = await sequelize.transaction()
+    try {
+      const userId = getUser(req).id
+      const travelId = req.params.id
+
+      const travel = await Travel.findByPk(travelId)
+      assert(travel, new AssertError('資料不存在'))
+      if (Number(travel.userId) !== Number(userId)) throw new CustomError('只能刪除自己的資料', 403)
+
+      await travel.destroy({ transaction: t })
+      await Image.destroy({ where: { travelId }, transaction: t })
+      await Like.destroy({ where: { travelId }, transaction: t })
+      await Collect.destroy({ where: { travelId }, transaction: t })
+
+      await t.commit()
+      req.flash('success_msg', '筆記刪除成功!!!')
+      return res.redirect(`/travels/list`)
     } catch (err) {
       await t.rollback()
       return next(err)

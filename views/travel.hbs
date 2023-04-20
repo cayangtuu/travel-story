@@ -61,10 +61,12 @@
       </button>
     </div>
   </div>
+  {{#ifCond the_user.id travel.User.id}}
   <div class="d-flex justify-content-center">
-    <a href="/travels/{{ travel.id }}/edit" class="btn btn-primary mx-1">修改</a>
-    <form class="mx-1" action="/travels/{{ travel.id }}?_method=DELETE" method="POST">
-      <button class="btn btn-danger" name="trip-id" value="{{ travel.id }}">刪除</button>
+    <a href="/travels/{{../travel.id}}/edit" class="btn btn-primary mx-1">修改</a>
+    <form class="mx-1" action="/travels/{{../travel.id}}?_method=DELETE" method="POST">
+      <button class="btn btn-danger" onclick=" return confirm(`確定要刪除 {{ ../travel.name }} 嗎？`)">刪除</button>
     </form>
   </div>
+  {{/ifCond}}
 </section>
