@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.Travel, { foreignKey: 'userId' })
       User.hasMany(models.Like, { foreignKey: 'userId' })
+      User.hasMany(models.Collect, { foreignKey: 'userId' })
     }
   };
   User.init({

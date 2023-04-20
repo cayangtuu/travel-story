@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const assert = require('assert')
-const { User, Travel, Image } = require('../models')
+const { User, Travel, Image, sequelize } = require('../models')
 const { CustomError, AssertError } = require('../helpers/error-helper')
 const { getUser } = require('../helpers/auth-helper')
 const imgurFileHandler = require('../helpers/file-helper')
@@ -48,7 +48,17 @@ const userController = {
   getProfile: async (req, res, next) => {
     try {
       const userId = req.params.id
-      const user = await User.findByPk(userId, { raw: true })
+      const user = await User.findByPk(userId, {
+        raw: true,
+        nest: true,
+        attributes: {
+          include: [
+            [sequelize.literal('(SELECT COUNT(*) FROM Travels WHERE Travels.User_id = User.id)'), 'travelCounts'],
+            [sequelize.literal('(SELECT COUNT(*) FROM Likes WHERE Likes.User_id = User.id)'), 'likeCounts'],
+            [sequelize.literal('(SELECT COUNT(*) FROM Collects WHERE Collects.User_id = User.id)'), 'collectCounts']
+          ]
+        }
+      })
       assert(user, new AssertError('找不到使用者'))
       const travels = await Travel.findAll({
         where: { userId },

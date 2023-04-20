@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Travel.belongsTo(models.User, { foreignKey: 'userId' })
       Travel.hasMany(models.Image, { foreignKey: 'travelId' })
       Travel.hasMany(models.Like, { foreignKey: 'travelId' })
+      Travel.hasMany(models.Collect, { foreignKey: 'travelId' })
     }
   }
   Travel.init({
