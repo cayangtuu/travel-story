@@ -1,7 +1,30 @@
 <section>
+  <div class="d-flex justify-content-between">
+    <p class="h3 mr-auto">{{travel.name}}</p>
+    <div class="d-flex justify-content-center">
+      {{#if isLiked}}
+      <form action="/travels/{{travel.id}}/unlike" method="POST">
+        <button class="btn m-1"><i class="fa-solid fa-heart fs-4 text-danger"></i></button>
+      </form>
+      {{else}}
+      <form action="/travels/{{travel.id}}/like" method="POST">
+        <button class="btn m-1"><i class="fa-regular fa-heart fs-4 text-danger"></i></button>
+      </form>
+      {{/if}}
+      {{#if isCollected}}
+      <form action="/travels/{{travel.id}}/uncollected" method="POST">
+        <button class="btn m-1"><i class="fa-solid fa-bookmark fs-4"></i></button>
+      </form>
+      {{else}}
+      <form action="/travels/{{travel.id}}/collected" method="POST">
+        <button class="btn m-1"><i class="fa-regular fa-bookmark fs-4"></i></button>
+      </form>
+      {{/if}}
+    </div>
+
+  </div>
+  <br>
   <div class="row">
-    <p class="h3">{{travel.name}}</p>
-    <p></p>
     <div class="col-md-4">
       <p class="h5">日期：{{formatDate travel.beginDate}}~{{formatDate travel.finishDate}}</p>
       <p class="h5">地點：{{travel.location}}</p>

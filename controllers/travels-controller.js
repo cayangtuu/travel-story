@@ -1,5 +1,5 @@
 const assert = require('assert')
-const { Travel, Image, User, Like, sequelize } = require('../models')
+const { Travel, Image, User, Like, Collect, sequelize } = require('../models')
 const imgurFileHandler = require('../helpers/file-helper')
 const { CustomError, AssertError } = require('../helpers/error-helper')
 const { getUser } = require('../helpers/auth-helper')
@@ -17,8 +17,10 @@ const travelController = {
   },
   getTravel: async (req, res, next) => {
     try {
-      const { id } = req.params
-      const travel = await Travel.findByPk(id, {
+      const userId = getUser(req).id
+      const travelId = req.params.id
+
+      const travel = await Travel.findByPk(travelId, {
         include: [{
           model: Image,
           attributes: ['image'],
@@ -29,9 +31,15 @@ const travelController = {
         }]
       })
       assert(travel, new AssertError('找不到資料'))
+
+      const isLiked = await Like.findOne({ where: { userId, travelId } })
+      const isCollected = await Collect.findOne({ where: { userId, travelId } })
+
       return res.render('travel', {
         travel: travel.toJSON(),
-        firstImage: travel.Images[0].image
+        firstImage: travel.Images[0].image,
+        isLiked: isLiked ? true : false,
+        isCollected: isCollected ? true : false
       })
     } catch (err) { next(err) }
   },
@@ -46,11 +54,13 @@ const travelController = {
         }
       })
       const userLikes = await Like.findAll({ raw: true, where: { userId }, attributes: ['travelId'] })
+      const userCollects = await Collect.findAll({ raw: true, where: { userId }, attributes: ['travelId'] })
       const data = travels.map(travel => ({
         ...travel.toJSON(),
         name: travel.name.length > 10 ? travel.name.slice(0, 10) + ' ...' : travel.name,
         Images: travel.Images[0].image,
-        isLiked: userLikes.some(userLike => userLike.travelId == travel.id)
+        isLiked: userLikes.some(userLike => userLike.travelId == travel.id),
+        isCollected: userCollects.some(userCollect => userCollect.travelId == travel.id)
       }))
       return res.render('travel-list', { travels: data })
     } catch (err) { next(err) }
@@ -99,7 +109,7 @@ const travelController = {
       await Like.create({
         userId, travelId
       })
-      return res.redirect('/travels/list')
+      return res.redirect('back')
     } catch (err) { next(err) }
   },
   postTravelUnlike: async (req, res, next) => {
@@ -114,8 +124,40 @@ const travelController = {
       if (!like) throw new CustomError('使用者未按讚', 400)
 
       await like.destroy()
-      return res.redirect('/travels/list')
+      return res.redirect('back')
     } catch (err) { next(err) }
-  }
+  },
+  postTravelCollected: async (req, res, next) => {
+    try {
+      const userId = getUser(req).id
+      const travelId = req.params.id
+
+      const travel = await Travel.findByPk(travelId)
+      assert(travel, new AssertError('找不到資料'))
+
+      const collect = await Collect.findOne({ where: { userId, travelId } })
+      if (collect) throw new CustomError('使用者已重複收藏', 400)
+
+      await Collect.create({
+        userId, travelId
+      })
+      return res.redirect('back')
+    } catch (err) { next(err) }
+  },
+  postTravelUncollected: async (req, res, next) => {
+    try {
+      const userId = getUser(req).id
+      const travelId = req.params.id
+
+      const travel = await Travel.findByPk(travelId)
+      assert(travel, new AssertError('找不到資料'))
+
+      const collect = await Collect.findOne({ where: { userId, travelId } })
+      if (!collect) throw new CustomError('使用者未收藏', 400)
+
+      await collect.destroy()
+      return res.redirect('back')
+    } catch (err) { next(err) }
+  },
 }
 module.exports = travelController

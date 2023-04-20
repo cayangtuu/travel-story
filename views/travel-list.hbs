@@ -20,7 +20,7 @@
             </div>
             <div class="d-flex">
               <i class="fa-regular fa-calendar-days fs-5"></i>
-              <p class="mx-2 fs-5 text-wrap">{{formatDate this.beginDate}} ~ {{formatDate this.finishDate}}</p>
+              <p class="mx-2 fs-5 mb-0 text-wrap">{{formatDate this.beginDate}} ~ {{formatDate this.finishDate}}</p>
             </div>
           </div>
         </div>
@@ -34,9 +34,15 @@
             <button class="btn m-1"><i class="fa-regular fa-heart fs-5 text-danger"></i></button>
           </form>
           {{/if}}
-          <form action="/travels/favorite/{{this.id}}" method="POST">
-            <button class="btn btn-outline-success m-1">收藏</button>
+          {{#if this.isCollected}}
+          <form action="/travels/{{this.id}}/uncollected" method="POST">
+            <button class="btn m-1"><i class="fa-solid fa-bookmark fs-5"></i></button>
           </form>
+          {{else}}
+          <form action="/travels/{{this.id}}/collected" method="POST">
+            <button class="btn m-1"><i class="fa-regular fa-bookmark fs-5"></i></button>
+          </form>
+          {{/if}}
         </div>
       </div>
       {{/each}}
