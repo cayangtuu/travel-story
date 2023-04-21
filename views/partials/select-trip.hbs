@@ -1,9 +1,0 @@
-<form class="trip-select" action="/Output">
-  <select name="trip-id" class="form-select form-select-lg" aria-label=".form-select-lg">
-    <option selected>旅行名稱</option>
-    {{#each travels}}
-    <option value={{this.id}}>{{this.name}}</option>
-    {{/each}}
-  </select>
-  <button class="btn btn-primary mt-3" type="submit">查詢</button>
-</form>
