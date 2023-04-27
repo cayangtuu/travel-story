@@ -29,11 +29,11 @@
     </div>
   </div>
   <hr>
-  <div class="mt-5 row">
+  <div class="mt-5 row justify-content-center">
     {{#each travels}}
-    <div class="card col-md-3 py-1 text-center">
+    <div class="card col-md-3 py-1 text-center" style="max-width:250px">
       <a href="/travels/{{this.id}}">
-        <img class="card-img-top bg-white center" style="height: 250px; width:250px" src=" {{this.Images}}" alt="旅行圖片">
+        <img class="card-img-top bg-white center" style="height: 250px; width:100%;" src=" {{this.Images}}" alt="旅行圖片">
       </a>
       <div class="card-body p-0">
         <div class="card-text position-relative">

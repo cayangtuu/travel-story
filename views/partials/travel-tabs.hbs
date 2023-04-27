@@ -1,0 +1,14 @@
+<ul class="nav nav-tabs mb-4" style="border-color:rgb(15, 41, 114);">
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'allTravels'}}active{{/ifCond}}" href="/travels/List"
+      style="{{#ifCond route 'allTravels'}}background-color:rgb(34, 164, 196);border-color:rgb(15, 41, 114);{{/ifCond}} color:black; font-size:larger;">所有旅行</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'newTravels'}}active {{/ifCond}}" href="/travels/new10"
+      style="{{#ifCond route 'newTravels'}}background-color:rgb(34, 164, 196);border-color:rgb(15, 41, 114);{{/ifCond}} color:black; font-size:larger;">最新旅行</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'topTravels'}}active{{/ifCond}}" href="/travels/top10"
+      style="{{#ifCond route 'topTravels'}}background-color:rgb(34, 164, 196);border-color:rgb(15, 41, 114);{{/ifCond}} color:black; font-size:larger;">最受歡迎旅行</a>
+  </li>
+</ul>

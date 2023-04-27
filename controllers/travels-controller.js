@@ -5,12 +5,9 @@ const { CustomError, AssertError } = require('../helpers/error-helper')
 const { getUser } = require('../helpers/auth-helper')
 
 const travelController = {
-  getTravels: async (req, res, next) => {
+  travelsPage: async (req, res, next) => {
     try {
-      const travels = await Travel.findAll({
-        raw: true
-      })
-      return res.render('travels', { travels })
+      return res.render('travels')
     } catch (err) {
       next(err)
     }

@@ -7,7 +7,7 @@ router.get('/list', travelController.travelList)
 router.get('/create', travelController.createTravel)
 router.get('/:id/edit', travelController.editTravel)
 router.get('/:id', travelController.getTravel)
-router.get('/', travelController.getTravels)
+router.get('/', travelController.travelsPage)
 
 router.post('/:id/like', travelController.postTravelLike)
 router.post('/:id/unlike', travelController.postTravelUnlike)
