@@ -42,24 +42,55 @@ const travelController = {
   },
   travelList: async (req, res, next) => {
     try {
+      const { route, number } = req.query
       const userId = getUser(req).id
-      const travels = await Travel.findAll({
-        include: {
-          model: Image,
-          attributes: ['image'],
-          order: ['created_at', 'DESC']
+
+      const travels = async () => {
+        if (route === 'newTravels') {
+          return await Travel.findAll({
+            include: {
+              model: Image,
+              attributes: ['image'],
+              order: ['created_at', 'DESC'],
+            },
+            order: [['created_at', 'DESC']],
+            limit: Number(number)
+          })
+        } else if (route === 'topTravels') {
+          return await Travel.findAll({
+            include: {
+              model: Image,
+              attributes: ['image'],
+              order: ['created_at', 'DESC'],
+            },
+            attributes: {
+              include: [[sequelize.literal('(SELECT COUNT(*) FROM Likes WHERE Likes.Travel_id = Travel.id)'), 'likeCounts']]
+            },
+            order: [[sequelize.literal(`likeCounts DESC`)]],
+            limit: Number(number)
+          })
+        } else {
+          return await Travel.findAll({
+            include: {
+              model: Image,
+              attributes: ['image'],
+              order: [['created_at', 'DESC']]
+            }
+          })
         }
-      })
+      }
+      assert((await travels()), new AssertError('找不到資料'))
+
       const userLikes = await Like.findAll({ raw: true, where: { userId }, attributes: ['travelId'] })
       const userCollects = await Collect.findAll({ raw: true, where: { userId }, attributes: ['travelId'] })
-      const data = travels.map(travel => ({
+      const data = (await travels()).map(travel => ({
         ...travel.toJSON(),
         name: travel.name.length > 10 ? travel.name.slice(0, 10) + ' ...' : travel.name,
         Images: travel.Images[0].image,
         isLiked: userLikes.some(userLike => userLike.travelId == travel.id),
         isCollected: userCollects.some(userCollect => userCollect.travelId == travel.id)
       }))
-      return res.render('travel-list', { travels: data })
+      return res.render('travel-list', { travels: data, route })
     } catch (err) { next(err) }
   },
   createTravel: (req, res, next) => {
