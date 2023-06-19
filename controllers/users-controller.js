@@ -3,7 +3,7 @@ const assert = require('assert')
 const { User, Travel, Image, sequelize } = require('../models')
 const { CustomError, AssertError } = require('../helpers/error-helper')
 const { getUser } = require('../helpers/auth-helper')
-const imgurFileHandler = require('../helpers/file-helper')
+const { gcpFileHandler } = require('../helpers/file-helper')
 
 const userController = {
   signUpPage: (req, res, next) => {
@@ -93,7 +93,7 @@ const userController = {
       const userId = req.params.id
       const { name, introduction } = req.body
       if (!name.trim()) throw new CustomError('必填欄位未正確填寫', 400)
-      const filePath = await imgurFileHandler(req.file)
+      const filePath = await gcpFileHandler(req.file)
       const user = await User.findByPk(userId)
       assert(user, new AssertError('找不到使用者'))
       await user.update({

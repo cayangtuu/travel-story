@@ -9,4 +9,16 @@ const imgurFileHandler = file => {
       .catch(err => reject(err))
   })
 }
-module.exports = imgurFileHandler
+
+const gcpFileHandler = file => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (!file) return resolve(null)
+      return resolve(file?.linkUrl || null)
+    } catch (err) {
+      return reject(err)
+    }
+  })
+}
+
+module.exports = { imgurFileHandler, gcpFileHandler }

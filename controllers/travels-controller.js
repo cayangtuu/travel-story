@@ -1,6 +1,6 @@
 const assert = require('assert')
 const { Travel, Image, User, Like, Collect, sequelize } = require('../models')
-const imgurFileHandler = require('../helpers/file-helper')
+const { gcpFileHandler } = require('../helpers/file-helper')
 const { CustomError, AssertError } = require('../helpers/error-helper')
 const { getUser } = require('../helpers/auth-helper')
 
@@ -111,7 +111,7 @@ const travelController = {
       const { files } = req
       await Promise.all(
         files.map(async (file) => {
-          const filePath = await imgurFileHandler(file)
+          const filePath = await gcpFileHandler(file)
           return await Image.create({
             image: filePath, travelId: newTravel.toJSON().id
           }, { transaction: t })
@@ -159,7 +159,7 @@ const travelController = {
         await Image.destroy({ where: { travelId }, transaction: t })
         await Promise.all(
           files.map(async (file) => {
-            const filePath = await imgurFileHandler(file)
+            const filePath = await gcpFileHandler(file)
             return await Image.create({
               image: filePath, travelId
             }, { transaction: t })
