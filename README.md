@@ -1,7 +1,10 @@
 # travel-story(旅行筆記)
-**以Node.js環境與Express.js框架進行JavaSript網頁開發，並搭配RestfulAPI路由撰寫風格。**  
+**[網站連結](https://travel-story-390212.de.r.appspot.com/) ，歡迎瀏覽**
+  
+**以Node.js程式與Express.js框架進行JavaSript網頁開發，以ORM操作MySQL資料庫，並搭配RestfulAPI路由撰寫風格。**  
 **旅行筆記**網頁提供使用者紀錄自己生活中大大小小旅行的過程與圖片，可以記錄、編輯並於自己的個人頁面中查看完整的資訊。同時也可以查看不同使用者的旅行分享、並對特定旅行紀錄進行收藏與按讚。  
-未來在網頁更新上也會提供讓共同旅行的使用者們可以一同編輯與維護該則旅行紀錄的功能，使朋友間的旅行也能一起記錄、共同回憶。
+未來在網頁更新上也會提供讓共同旅行的使用者們可以一同編輯與維護該則旅行紀錄的功能，使朋友間的旅行也能一起記錄、共同回憶。  
+
 <div align="center">
 	<img src="https://github.com/cayangtuu/travel-story/blob/main/public/travel-%E9%A6%96%E9%A0%81.PNG" width="400" height="300">
   <img src="https://github.com/cayangtuu/travel-story/blob/main/public/travel-%E6%97%85%E8%A1%8C%E5%88%97%E8%A1%A8.PNG" width="400" height="300">
